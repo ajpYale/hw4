@@ -1,0 +1,22 @@
+Fonts bundled with this project
+===============================
+
+The .woff2 files in this folder are redistributed here so the site renders
+identically without a network connection. All three families are licensed under
+the SIL Open Font License, Version 1.1, which permits bundling and
+redistribution.
+
+  Pinyon Script       Copyright (c) Nicole Fally
+                      https://fonts.google.com/specimen/Pinyon+Script
+
+  IM Fell English     Copyright (c) Igino Marini
+                      https://fonts.google.com/specimen/IM+Fell+English
+
+  Cormorant Garamond  Copyright (c) Christian Thalmann, Catharsis Fonts
+                      https://fonts.google.com/specimen/Cormorant+Garamond
+
+Full license text: https://scripts.sil.org/OFL
+
+Under the OFL these fonts may be used, studied, modified and redistributed
+freely so long as they are not sold by themselves, and any derivative keeps the
+same license. They are not sold here and are not modified.
