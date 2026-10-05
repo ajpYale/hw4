@@ -16,11 +16,13 @@ looks like that, and a default-looking store implies default-looking goods.
 
 ### The page is made of paper
 
-The background is cream, not white, and it is unevenly aged: layered radial gradients
-put sun-warmth in the corners, scattered foxing spots across the field, and a vignette
-that darkens toward the edges the way a closed book shades at its gutter. Over all of
-it sits a grain layer generated with SVG `feTurbulence` — real noise, drawn in the
-browser, so there is no texture image to download.
+The background is properly yellowed paper (`#e3d4ac`), not white or even cream, and it
+is unevenly aged: layered radial gradients leave water stains and sun-browning in the
+corners, rust-brown foxing spots are scattered across the field, and a faint
+horizontal fold crosses the sheet as if the catalogue sat folded in a drawer. A
+vignette darkens toward the edges the way a closed book shades at its gutter. Over all
+of it sits a heavy grain layer generated with SVG `feTurbulence`: real noise, drawn in
+the browser, so there is no texture image to download.
 
 **Why it helps.** It signals a shop with a history before a single word is read. The
 texture is heavy enough to feel like a surface and light enough that body text still
@@ -28,19 +30,23 @@ sits at a comfortable contrast against it.
 
 ### Type does the talking
 
-Playfair Display sets every heading; EB Garamond sets the body at 18px with generous
-line height. Overlines are small-caps with wide letterspacing. The masthead is
-letterpressed — a dark shadow below the letterforms and a pale highlight above, so the
-wordmark reads as struck into the navy rather than printed on it.
+Headings and prices are set in **IM Fell English**, a digitization of 1680s
+letterpress type that keeps the uneven ink spread, with a one-pixel ink-bleed shadow
+added on top. Body copy is **Cormorant Garamond** at 18px with generous line height.
+The shop's name in the masthead is an engraved copperplate script, **Pinyon Script**,
+in cream and gold on navy. Overlines are small caps with wide letterspacing. All three
+typefaces are bundled with the site rather than loaded from Google, so the page renders
+the same offline.
 
 **Why it helps.** Serif body copy at this size is genuinely easier to read in long
 passages than the usual 14px sans, and product descriptions here are full sentences
-worth reading.
+worth reading. The script is kept to the wordmark alone, so it never has to be read
+under pressure.
 
 ### Products are mounted as catalogue plates
 
 Each card is a paper tile with a ruled border, a caption centered beneath it, and the
-price set in Playfair above a hairline rule. On hover the plate lifts and rotates a
+price set in IM Fell above a hairline rule. On hover the plate lifts and rotates a
 quarter-degree, as though nudged on a desk. Grid items rise in with a short stagger.
 
 ### The one rule the aging obeys
@@ -84,8 +90,8 @@ thing you were just browsing.
 
 Two things were deliberately left alone:
 
-- **Contrast was not sacrificed.** Ink is `#241e14` on `#f2e9d6`, comfortably past the
-  accessible contrast threshold. A more authentic faded-sepia text would have been
+- **Contrast was not sacrificed.** Ink is `#2a2015` on the `#e3d4ac` paper, about
+  11:1, far past the 4.5:1 accessible threshold even after the paper was darkened. A more authentic faded-sepia text would have been
   harder to read, and an unreadable price is a lost sale.
 - **Motion respects `prefers-reduced-motion`.** The hover lift, the stagger, and every
   transition are disabled for anyone whose system asks for that.

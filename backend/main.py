@@ -17,7 +17,7 @@ from dotenv import load_dotenv
 from fastapi import Cookie, FastAPI, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from pydantic_ai.exceptions import ModelHTTPError
+from pydantic_ai.exceptions import ModelHTTPError, UsageLimitExceeded
 
 import agent as shop_agent
 import tools as shop
@@ -321,6 +321,17 @@ async def chat(
         raise HTTPException(
             502, "The shop assistant is having trouble right now. Try again in a moment."
         ) from exc
+
+    except UsageLimitExceeded as exc:
+        # The loop hit MAX_TOOL_STEPS / MAX_TOOL_CALLS without finishing. Logged with its
+        # own stop reason so runaway loops are visible in the audit trail.
+        shop.audit("chat", {"message": body.message}, str(exc), "usage_limit")
+        return ChatReply(
+            reply_text=(
+                "Sorry, I could not pin that down. Could you ask about one item or "
+                "category at a time?"
+            )
+        )
 
     except Exception as exc:  # noqa: BLE001 - surfaced to the shopper as a soft failure
         shop.audit(

@@ -61,10 +61,14 @@ def build_agent() -> Agent[ShopDeps, str]:
     )
     model = OpenAIChatModel(MODEL_NAME, provider=OpenAIProvider(openai_client=client))
 
+    # prompt.md goes in as `instructions`, not `system_prompt`. PydanticAI only sends a
+    # system_prompt when the message history is empty, so a signed-in customer with
+    # saved history would otherwise get a model with no voice, tool or safety rules.
+    # Instructions are sent on every request.
     agent = Agent(
         model,
         deps_type=ShopDeps,
-        system_prompt=load_system_prompt(),
+        instructions=load_system_prompt(),
         retries=2,
     )
 
@@ -256,6 +260,18 @@ async def answer(
             tool_calls_limit=MAX_TOOL_CALLS,
         ),
     )
+
+    # One entry per completed agent loop, so the audit trail shows how each turn ended
+    # and not just which tools it called. Failed runs are logged by main.py.
+    usage = result.usage
+    shop.audit(
+        "chat",
+        {"message": message, "product_id": deps.current_product_id},
+        f"{usage.requests} model requests, {usage.tool_calls} tool calls, "
+        f"{len(deps.matched)} products shown",
+        stop_reason=result.response.finish_reason or "stop",
+    )
+
     return ChatReply(
         reply_text=result.output,
         products=shop.cards_for_ids(deps.matched),

@@ -216,7 +216,11 @@ uvicorn main:app --reload --port 8000
 ## 9. The agent
 
 **Loading.** `agent.py` reads the system prompt from `backend/prompts/prompt.md` at
-build time and constructs a PydanticAI `Agent` over `OpenAIChatModel`, pointed at
+build time and passes it to the agent as `instructions`, not `system_prompt`.
+PydanticAI only sends a `system_prompt` when the message history is empty, so a
+signed-in customer with saved history would otherwise have been answered by a model
+with no voice, tool or safety rules. Instructions are sent on every request. The agent
+is a PydanticAI `Agent` over `OpenAIChatModel`, pointed at
 Portkey's OpenAI-compatible endpoint (`https://api.portkey.ai/v1`) with the
 `x-portkey-api-key` header. The model is `gpt-5.6-luna`. `PORTKEY_API_KEY` is read from
 `hw4/.env`, falling back to the parent folder's `.env`. The agent is cached with
@@ -296,7 +300,7 @@ A dedicated `chat_history` table, created on startup by `ensure_schema()`:
 | `user_id` | Whose conversation it is. Foreign key to `users`. |
 | `role` | `user` or `assistant`, constrained by a `CHECK` so a bad value cannot be written. |
 | `content` | The message prose. |
-| `products_json` | The cards that were shown with an assistant reply, so a reloaded conversation looks exactly as it did. |
+| `products_json` | The cards that were shown with an assistant reply. On reload only their `product_id`s are trusted; each card is rebuilt from the catalogue so it shows current price and stock, not a stale snapshot. |
 | `page_path` | Which page the customer was on. |
 | `product_context` | Which product they were looking at, if any. |
 | `created_at` | Timestamp, defaulting to `datetime('now')`. |
@@ -344,6 +348,10 @@ that *"which of those is cheapest?"* resolves against the previous answer, while
 keeping per-message cost bounded instead of growing with the length of the
 conversation. Only the prose is replayed — the stored product cards are not resent,
 since the model does not need them to follow the thread.
+
+The same cap applies to what the chat panel reloads: a returning customer sees their
+last 10 messages (`GET /api/chat/history`). Older rows stay in `chat_history`; they are
+just not shown or replayed.
 
 ## 13. Safety
 
@@ -412,7 +420,29 @@ Every tool call appends one record to `output/audit_trail.json`:
 }
 ```
 
-`stop_reason` is `ok`, `no_match`, `model_error`, or `error`. The file is read, appended
+Then each agent loop closes with one `chat` record saying how the turn ended:
+
+```json
+{
+  "time": "2026-10-05T20:21:32+00:00",
+  "tool": "chat",
+  "args": { "message": "do you have this in pink?", "product_id": "baseball-left-chest-crewneck" },
+  "result": "2 model requests, 1 tool calls, 1 products shown",
+  "stop_reason": "stop"
+}
+```
+
+`stop_reason` values:
+
+| Value | Written by | Meaning |
+|---|---|---|
+| `ok` / `no_match` | a tool | The lookup found something, or found nothing. |
+| `stop` | end of a run | The model finished its answer normally (the model's own finish reason; `length` or `content_filter` would appear here too). |
+| `usage_limit` | end of a run | The loop hit `MAX_TOOL_STEPS` or `MAX_TOOL_CALLS` before answering. The shopper gets a polite "ask about one thing at a time" reply. |
+| `model_error` | end of a run | The provider rejected the request (e.g. its content filter). |
+| `error` | end of a run | Anything else that went wrong. |
+
+The file is read, appended
 to, and rewritten — **never truncated between runs**. Arguments are clipped to 120
 characters and results to 200 so one large search cannot bloat the log.
 

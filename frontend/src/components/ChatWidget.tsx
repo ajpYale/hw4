@@ -87,7 +87,7 @@ export default function ChatWidget() {
         {
           role: 'assistant',
           content:
-            "I'm not connected to the shop assistant yet — that gets wired up in Problem 5. Browsing and product pages work in the meantime.",
+            "Sorry, I can't reach the shop assistant right now. Try again in a moment — browsing and product pages still work in the meantime.",
         },
       ])
     } finally {
