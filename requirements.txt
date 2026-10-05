@@ -1,0 +1,12 @@
+# Campus Customs backend — install into a .venv inside this folder:
+#   python -m venv .venv
+#   .venv/Scripts/pip install -r requirements.txt     (Windows)
+#   .venv/bin/pip install -r requirements.txt         (macOS / Linux)
+
+fastapi==0.142.2
+uvicorn[standard]==0.54.0
+pydantic==2.13.5
+pydantic-ai==2.54.0
+openai==3.24.0
+python-dotenv==1.2.4
+bcrypt==5.0.0

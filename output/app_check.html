@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Campus Customs — Site Testing (Problem 11)</title>
+    <style>
+      :root {
+        --navy: #16243f;
+        --gold: #b08828;
+        --paper: #e3d4ac;
+        --paper-light: #efe3c2;
+        --ink: #2a2015;
+        --ink-soft: #5f5035;
+        --rule: #c9b78f;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        padding: 2.5rem 1.5rem 4rem;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: Georgia, 'Times New Roman', serif;
+        font-size: 17px;
+        line-height: 1.6;
+      }
+      .wrap { max-width: 920px; margin: 0 auto; }
+      header {
+        text-align: center;
+        border-bottom: 3px double var(--gold);
+        padding-bottom: 1.6rem;
+        margin-bottom: 2.5rem;
+      }
+      h1 { font-size: 2rem; margin: 0 0 0.4rem; color: var(--navy); }
+      .sub {
+        font-style: italic;
+        color: var(--ink-soft);
+        margin: 0;
+      }
+      .overline {
+        text-transform: uppercase;
+        letter-spacing: 0.25em;
+        font-size: 0.72rem;
+        color: var(--gold);
+        margin: 0 0 0.6rem;
+      }
+      section {
+        background: var(--paper-light);
+        border: 1px solid var(--rule);
+        padding: 1.6rem;
+        margin-bottom: 2.5rem;
+        box-shadow: 0 8px 20px -14px rgba(60, 42, 16, 0.6);
+      }
+      h2 {
+        font-size: 1.3rem;
+        color: var(--navy);
+        margin: 0 0 0.2rem;
+      }
+      .q {
+        font-style: italic;
+        color: var(--ink-soft);
+        margin: 0 0 1.1rem;
+      }
+      img {
+        width: 100%;
+        display: block;
+        border: 1px solid var(--rule);
+        background: #fff;
+        padding: 0.4rem;
+      }
+      .caption {
+        margin: 1rem 0 0;
+        font-size: 0.97rem;
+      }
+      .proof {
+        margin: 0.9rem 0 0;
+        padding: 0.8rem 1rem;
+        background: rgba(176, 136, 40, 0.1);
+        border-left: 3px solid var(--gold);
+        font-size: 0.92rem;
+      }
+      code {
+        font-family: 'Courier New', monospace;
+        font-size: 0.88rem;
+        background: rgba(22, 36, 63, 0.07);
+        padding: 0.05rem 0.3rem;
+      }
+      table {
+        border-collapse: collapse;
+        margin-top: 0.5rem;
+        font-size: 0.88rem;
+      }
+      th, td {
+        border: 1px solid var(--rule);
+        padding: 0.25rem 0.7rem;
+        text-align: left;
+      }
+      th { background: rgba(22, 36, 63, 0.07); }
+      footer {
+        text-align: center;
+        font-style: italic;
+        color: var(--ink-soft);
+        font-size: 0.88rem;
+        border-top: 1px solid var(--rule);
+        padding-top: 1.2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <p class="overline">Problem 11 · Site testing</p>
+        <h1>Campus Customs — App Check</h1>
+        <p class="sub">
+          Three checks against the running site, each screenshot taken from the live
+          app with the FastAPI backend reading <code>data/campus_customs.db</code>.
+        </p>
+      </header>
+
+      <section>
+        <h2>1. The assistant checks real inventory</h2>
+        <p class="q">Asked on the Basic Hoodie Big Yale product page: “how many of this do you have left in each size?”</p>
+
+        <img src="app_check_images/01_inventory_lookup.jpg"
+             alt="The chat assistant listing stock by size for the Basic Hoodie Big Yale" />
+
+        <p class="caption">
+          The assistant answers <strong>“XS (15), S (5), M (5), L (8), XL (2), XXL (25)”</strong>.
+          Two things are being proved at once. The numbers come from a
+          <code>check_stock</code> tool call against the <code>inventory</code> table —
+          they are not invented. And the question never names the product: the shopper
+          says “this”, and the assistant resolves it from the product page they are on.
+        </p>
+
+        <div class="proof">
+          Verified against the database — <code>SELECT size, quantity FROM inventory
+          WHERE product_id = 'basic-hoodie-big-yale'</code> returns XS 15, S 5, M 5,
+          L 8, XL 2, XXL 25. Every figure on screen matches.
+        </div>
+      </section>
+
+      <section>
+        <h2>2. A chat question renders product cards on the page</h2>
+        <p class="q">Asked from the home page: “what hoodies do you have?”</p>
+
+        <img src="app_check_images/02_chat_search_cards.jpg"
+             alt="The chat assistant reporting 27 hoodie designs with product cards rendered beneath the reply" />
+
+        <p class="caption">
+          The assistant searched the catalogue and the matching products appeared
+          underneath the reply as clickable cards with image, name, category and price.
+          These are the <em>same</em> <code>ProductCard</code> component the Products
+          grid uses, so clicking one opens the normal product page with its size
+          selector and live stock.
+        </p>
+
+        <div class="proof">
+          Note the count: <strong>“We have 27 hoodie designs”</strong>, not six. The
+          card list is capped at six for readability, so the search tool returns the
+          true total separately. The raw <code>garment_type</code> column would have
+          found only 5 — it stores 22 different spellings for about six real
+          categories, and the backend normalizes them before counting.
+        </div>
+      </section>
+
+      <section>
+        <h2>3. Usability feature from Problem 9 — stock visible before the click</h2>
+        <p class="q">Browsing the Quarter-Zips category.</p>
+
+        <img src="app_check_images/03_stock_badges.jpg"
+             alt="A product grid where one card carries a gold badge reading Only XS, L, XL" />
+
+        <p class="caption">
+          The School Of Engineering ¼ Zip carries a gold
+          <strong>“Only XS, L, XL”</strong> badge; the two beside it carry none,
+          because they are fully stocked. Before this, availability only appeared on
+          the product detail page — a shopper who wears medium had to open an item,
+          discover their size was gone, and go back. The badge is drawn from the live
+          <code>inventory</code> table and only appears when three or fewer sizes
+          remain, so it always means something.
+        </p>
+
+        <div class="proof">
+          Verified against the database for <code>school-of-engineering-1-4-zip</code>:
+          <table>
+            <tr><th>Size</th><th>XS</th><th>S</th><th>M</th><th>L</th><th>XL</th><th>XXL</th></tr>
+            <tr><td>Qty</td><td>25</td><td>0</td><td>0</td><td>25</td><td>25</td><td>0</td></tr>
+          </table>
+          In stock: XS, L, XL — exactly what the badge claims.
+        </div>
+      </section>
+
+      <footer>Campus Customs · MGT 409 Homework 4 · Problem 11</footer>
+    </div>
+  </body>
+</html>

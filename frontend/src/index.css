@@ -1,0 +1,1086 @@
+/* Campus Customs — styled as a well-handled nineteenth-century catalogue:
+   aged paper, letterpress serif type, navy and gold throughout.
+
+   One rule governs the aging: it is applied to the page, never to the product
+   photographs. A customer must see the true color of what they are buying. */
+
+:root {
+  --navy: #16243f;
+  --navy-deep: #0e1830;
+  --navy-soft: #27395c;
+  --gold: #b08828;
+  --gold-bright: #d4ab4a;
+  --gold-pale: #e8d9a8;
+
+  /* Paper yellowed well past cream — this stock has been in a window. */
+  --paper: #e3d4ac;
+  --paper-light: #efe3c2;
+  --paper-shade: #d4c193;
+  /* Iron-gall ink, faded brown-black rather than true black. */
+  --ink: #2a2015;
+  --ink-soft: #5f5035;
+
+  --rule: #c9b78f;
+  --rule-line: #cbbb95;
+
+  font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  font-size: 18px;
+  color: var(--ink);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* ---------- the paper itself ---------- */
+
+body {
+  margin: 0;
+  background-color: var(--paper);
+  /* Water stains, sun bleaching and foxing, layered so no two areas of the sheet
+     are quite the same tone. */
+  background-image:
+    radial-gradient(ellipse 55% 38% at 9% 6%, rgba(132, 92, 30, 0.22), transparent 68%),
+    radial-gradient(ellipse 48% 32% at 91% 18%, rgba(118, 80, 32, 0.2), transparent 68%),
+    radial-gradient(ellipse 65% 42% at 74% 94%, rgba(104, 72, 28, 0.2), transparent 70%),
+    radial-gradient(ellipse 40% 55% at 50% 48%, rgba(150, 112, 48, 0.1), transparent 72%),
+    radial-gradient(ellipse 30% 18% at 28% 72%, rgba(112, 76, 26, 0.16), transparent 70%),
+    /* foxing — the small rust-brown age spots */
+    radial-gradient(circle 3px at 23% 34%, rgba(118, 78, 28, 0.42), transparent),
+    radial-gradient(circle 2px at 67% 61%, rgba(118, 78, 28, 0.38), transparent),
+    radial-gradient(circle 5px at 41% 78%, rgba(118, 78, 28, 0.26), transparent),
+    radial-gradient(circle 2px at 85% 45%, rgba(118, 78, 28, 0.4), transparent),
+    radial-gradient(circle 4px at 14% 57%, rgba(118, 78, 28, 0.3), transparent),
+    radial-gradient(circle 2px at 55% 15%, rgba(118, 78, 28, 0.36), transparent),
+    radial-gradient(circle 3px at 77% 83%, rgba(118, 78, 28, 0.3), transparent),
+    radial-gradient(circle 2px at 36% 25%, rgba(118, 78, 28, 0.34), transparent),
+    radial-gradient(circle 6px at 92% 68%, rgba(118, 78, 28, 0.2), transparent),
+    /* a long-settled horizontal fold across the sheet */
+    linear-gradient(to bottom, transparent 41.6%, rgba(96, 66, 24, 0.13) 42%, rgba(255, 248, 228, 0.3) 42.4%, transparent 42.8%);
+  background-attachment: fixed;
+}
+
+/* Paper grain, drawn as SVG noise so there is no image file to ship. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.55;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.62' numOctaves='5' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='0.62'/%3E%3C/svg%3E");
+}
+
+/* Edge darkening, the way a closed book shades toward its gutter and edges. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: radial-gradient(
+    ellipse 125% 105% at 50% 50%,
+    transparent 40%,
+    rgba(78, 52, 18, 0.2) 76%,
+    rgba(48, 31, 10, 0.44) 100%
+  );
+}
+
+#root {
+  position: relative;
+  z-index: 3;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1,
+h2,
+h3 {
+  font-family: 'IM Fell English', Georgia, 'Times New Roman', serif;
+  font-weight: 400;
+  line-height: 1.12;
+  margin: 0 0 0.6rem;
+  color: var(--navy);
+  /* Ink bleed: a hair of spread into the paper fibres, as letterpress does. */
+  text-shadow: 0 0 1px rgba(22, 36, 63, 0.3);
+}
+
+h1 {
+  font-size: 3.1rem;
+  letter-spacing: 0;
+}
+
+p {
+  line-height: 1.68;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+}
+
+/* Small caps label, used for every overline in the site. */
+.eyebrow {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--gold);
+  margin: 0 0 0.7rem;
+}
+
+.muted {
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  font-style: italic;
+}
+
+.muted a {
+  color: var(--navy);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ---------- masthead ---------- */
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--navy);
+  color: var(--paper-light);
+  border-bottom: 3px double var(--gold);
+  box-shadow: 0 2px 14px rgba(30, 20, 6, 0.3);
+}
+
+.nav__inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0.9rem 1.6rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+/* The shop's name is set as an engraved copperplate signature. */
+.nav__brand {
+  font-family: 'Pinyon Script', 'IM Fell English', cursive;
+  font-weight: 400;
+  font-size: 1.85rem;
+  line-height: 1;
+  padding-top: 0.15rem;
+  letter-spacing: 0.01em;
+  color: var(--paper-light);
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.6),
+    0 0 10px rgba(212, 171, 74, 0.2);
+}
+
+.nav__brand span {
+  color: var(--gold-bright);
+}
+
+.nav__links {
+  display: flex;
+  gap: 1.7rem;
+  flex: 1;
+}
+
+.nav__auth {
+  display: flex;
+  gap: 1.1rem;
+  align-items: center;
+}
+
+.nav__link {
+  font-size: 0.86rem;
+  text-transform: uppercase;
+  letter-spacing: 0.17em;
+  color: rgba(242, 233, 214, 0.74);
+  padding-bottom: 3px;
+  border-bottom: 1px solid transparent;
+  transition: color 0.18s ease, border-color 0.18s ease;
+}
+
+.nav__link:hover {
+  color: var(--paper-light);
+  border-bottom-color: var(--gold);
+}
+
+.nav__link--active {
+  color: var(--gold-bright);
+  border-bottom-color: var(--gold);
+}
+
+.nav__link--button {
+  background: none;
+  border: none;
+  border-bottom: 1px solid transparent;
+  font-family: inherit;
+  cursor: pointer;
+  padding: 0 0 3px;
+}
+
+.nav__who {
+  font-size: 0.86rem;
+  font-style: italic;
+  color: var(--gold-pale);
+}
+
+/* ---------- buttons ---------- */
+
+.btn {
+  display: inline-block;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  background: var(--navy);
+  color: var(--paper-light);
+  border: 1px solid var(--navy);
+  padding: 0.6rem 1.7rem;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.17em;
+  cursor: pointer;
+  border-radius: 1px;
+  box-shadow: 0 1px 0 rgba(255, 245, 220, 0.25) inset;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--navy-deep);
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--navy);
+  border-color: var(--navy);
+}
+
+.btn--small {
+  padding: 0.4rem 1rem;
+  font-size: 0.72rem;
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--navy-deep);
+}
+
+.btn--small:hover {
+  background: var(--gold-bright);
+  border-color: var(--gold-bright);
+}
+
+.btn--wide {
+  width: 100%;
+}
+
+/* ---------- layout ---------- */
+
+.section {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 3.4rem 1.6rem;
+}
+
+/* Section headings sit on a rule, like a chapter opening. */
+.section__title {
+  font-size: 1.7rem;
+  text-align: center;
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.section__title::after {
+  content: '❖';
+  display: block;
+  font-size: 0.75rem;
+  color: var(--gold);
+  margin-top: 0.6rem;
+  letter-spacing: 0.4em;
+}
+
+/* ---------- title page hero ---------- */
+
+.hero {
+  background: var(--navy);
+  background-image:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(176, 136, 40, 0.16), transparent 70%),
+    radial-gradient(ellipse 60% 50% at 20% 100%, rgba(0, 0, 0, 0.34), transparent 70%);
+  color: var(--paper-light);
+  padding: 5.5rem 1.6rem;
+  border-bottom: 3px double var(--gold);
+  text-align: center;
+}
+
+.hero__text {
+  max-width: 740px;
+  margin: 0 auto;
+  /* A ruled frame, inset from the navy field, like a title page border. */
+  border-top: 1px solid rgba(212, 171, 74, 0.5);
+  border-bottom: 1px solid rgba(212, 171, 74, 0.5);
+  padding: 2.6rem 1rem;
+}
+
+.hero h1 {
+  font-size: 4rem;
+  color: var(--paper-light);
+  margin-bottom: 1.1rem;
+  font-style: italic;
+  text-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.5),
+    0 0 1px rgba(242, 233, 214, 0.4);
+}
+
+.hero .eyebrow {
+  color: var(--gold-bright);
+}
+
+.hero__lede {
+  max-width: 54ch;
+  margin: 0 auto;
+  color: rgba(242, 233, 214, 0.86);
+  font-size: 1.07rem;
+  font-style: italic;
+}
+
+.hero__actions {
+  display: flex;
+  gap: 0.9rem;
+  margin-top: 2rem;
+  justify-content: center;
+}
+
+.hero .btn {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--navy-deep);
+}
+
+.hero .btn:hover {
+  background: var(--gold-bright);
+  border-color: var(--gold-bright);
+}
+
+.hero .btn--ghost {
+  background: transparent;
+  border-color: rgba(232, 217, 168, 0.55);
+  color: var(--paper-light);
+}
+
+.hero .btn--ghost:hover {
+  background: rgba(232, 217, 168, 0.12);
+}
+
+/* ---------- three-column footnote band ---------- */
+
+.band {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 2.4rem;
+  border-top: 1px solid var(--rule-line);
+  padding-top: 2.6rem;
+}
+
+.band__item h3 {
+  font-size: 1.1rem;
+  font-style: italic;
+}
+
+.band__item p {
+  color: var(--ink-soft);
+  font-size: 0.94rem;
+  margin: 0;
+}
+
+/* ---------- chips ---------- */
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1.6rem 0;
+  padding-bottom: 1.4rem;
+  border-bottom: 1px solid var(--rule-line);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.chip {
+  font-family: inherit;
+  background: transparent;
+  border: 1px solid var(--rule);
+  padding: 0.38rem 0.95rem;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  color: var(--navy);
+  cursor: pointer;
+  border-radius: 1px;
+  transition: all 0.18s ease;
+}
+
+.chip span {
+  color: var(--gold);
+  font-size: 0.72rem;
+  margin-left: 0.3rem;
+}
+
+.chip:hover {
+  border-color: var(--gold);
+  background: rgba(176, 136, 40, 0.09);
+}
+
+.chip--active {
+  background: var(--navy);
+  color: var(--paper-light);
+  border-color: var(--navy);
+}
+
+.chip--active span {
+  color: var(--gold-bright);
+}
+
+.search {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.search input,
+.chat__form input,
+.form input {
+  font-family: inherit;
+  font-size: 0.95rem;
+  border: 1px solid var(--rule);
+  border-radius: 1px;
+  padding: 0.5rem 0.8rem;
+  background: rgba(255, 252, 244, 0.72);
+  color: var(--ink);
+}
+
+.search input::placeholder,
+.chat__form input::placeholder {
+  color: #9a8a6f;
+  font-style: italic;
+}
+
+.search input:focus,
+.chat__form input:focus,
+.form input:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px rgba(176, 136, 40, 0.18);
+}
+
+.search button {
+  font-family: inherit;
+  border: 1px solid var(--navy);
+  background: var(--navy);
+  color: var(--paper-light);
+  border-radius: 1px;
+  padding: 0.5rem 1.1rem;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  cursor: pointer;
+}
+
+/* ---------- plate grid ---------- */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(238px, 1fr));
+  gap: 2.2rem;
+  margin-top: 1.6rem;
+}
+
+/* Each product is mounted like a catalogue plate: paper tile, double rule, caption. */
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--paper-light);
+  border: 1px solid var(--rule);
+  padding: 0.75rem;
+  border-radius: 1px;
+  box-shadow:
+    0 1px 2px rgba(60, 42, 16, 0.14),
+    0 10px 22px -14px rgba(60, 42, 16, 0.4);
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px) rotate(-0.25deg);
+  box-shadow:
+    0 2px 3px rgba(60, 42, 16, 0.18),
+    0 20px 32px -16px rgba(60, 42, 16, 0.5);
+}
+
+.card__image {
+  aspect-ratio: 1;
+  position: relative;
+  /* The plate window is white so the garment's real color is not tinted. */
+  background: #fff;
+  border: 1px solid var(--rule-line);
+  overflow: hidden;
+}
+
+.card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.badge {
+  position: absolute;
+  left: 0;
+  bottom: 0.7rem;
+  padding: 0.2rem 0.7rem;
+  font-size: 0.64rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-weight: 600;
+}
+
+.badge--out {
+  background: var(--navy);
+  color: var(--paper-light);
+}
+
+.badge--low {
+  background: var(--gold);
+  color: var(--navy-deep);
+}
+
+.card__body {
+  padding: 0.85rem 0.35rem 0.3rem;
+  text-align: center;
+}
+
+.card__name {
+  font-family: 'IM Fell English', Georgia, 'Times New Roman', serif;
+  font-size: 1.05rem;
+  font-weight: 400;
+  margin: 0 0 0.3rem;
+}
+
+.card__meta {
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  margin: 0 0 0.55rem;
+}
+
+.card__blurb {
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  margin: 0 0 0.7rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card__price {
+  font-family: 'IM Fell English', Georgia, 'Times New Roman', serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 0;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--rule-line);
+}
+
+.card--compact {
+  padding: 0.4rem;
+}
+
+.card--compact .card__body {
+  padding: 0.5rem 0.2rem 0.15rem;
+}
+
+.card--compact .card__name {
+  font-size: 0.8rem;
+}
+
+.card--compact .card__price {
+  font-size: 0.85rem;
+}
+
+/* ---------- product page, set as a book spread ---------- */
+
+.detail {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 3.4rem;
+  align-items: start;
+  position: relative;
+}
+
+/* The gutter rule between the two pages of the spread. */
+.detail::before {
+  content: '';
+  position: absolute;
+  left: calc(51.2% - 1.7rem);
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--rule-line) 12%,
+    var(--rule-line) 88%,
+    transparent
+  );
+}
+
+.detail__media img {
+  width: 100%;
+  display: block;
+  background: #fff;
+  border: 1px solid var(--rule);
+  padding: 0.8rem;
+  box-shadow: 0 14px 30px -18px rgba(60, 42, 16, 0.6);
+}
+
+.detail__price {
+  font-family: 'IM Fell English', Georgia, 'Times New Roman', serif;
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 0.3rem 0 1.2rem;
+}
+
+.detail__desc {
+  font-size: 1.02rem;
+  color: var(--ink);
+}
+
+.detail__row {
+  margin: 1.5rem 0;
+}
+
+.label {
+  display: block;
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--gold);
+  margin-bottom: 0.6rem;
+}
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.pill {
+  border: 1px solid var(--rule);
+  padding: 0.24rem 0.7rem;
+  font-size: 0.82rem;
+  background: rgba(255, 252, 244, 0.6);
+}
+
+.pill--quiet {
+  color: var(--ink-soft);
+  font-size: 0.75rem;
+  font-style: italic;
+  border-style: dashed;
+}
+
+.sizes {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.size {
+  font-family: inherit;
+  min-width: 3.1rem;
+  padding: 0.5rem;
+  border: 1px solid var(--rule);
+  background: rgba(255, 252, 244, 0.7);
+  font-size: 0.88rem;
+  cursor: pointer;
+  border-radius: 1px;
+  transition: all 0.16s ease;
+}
+
+.size:hover:not(:disabled) {
+  border-color: var(--gold);
+  background: rgba(176, 136, 40, 0.1);
+}
+
+.size--active {
+  background: var(--navy);
+  color: var(--paper-light);
+  border-color: var(--navy);
+}
+
+.size--out {
+  color: #a89880;
+  background: transparent;
+  border-style: dashed;
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+
+.stock {
+  font-size: 0.92rem;
+  font-style: italic;
+  color: var(--ink-soft);
+  margin: 0 0 1.2rem;
+}
+
+.backlink {
+  display: inline-block;
+  margin-top: 1.8rem;
+  font-size: 0.84rem;
+  font-style: italic;
+  color: var(--ink-soft);
+  border-bottom: 1px solid transparent;
+}
+
+.backlink:hover {
+  color: var(--navy);
+  border-bottom-color: var(--gold);
+}
+
+/* ---------- prose, with a drop cap ---------- */
+
+.prose {
+  max-width: 64ch;
+}
+
+.prose p,
+.prose li {
+  font-size: 1.04rem;
+  color: var(--ink);
+}
+
+/* The opening paragraph gets an illuminated initial. Matched as "the paragraph
+   following the title" so it lands on real body copy, not the small-caps overline
+   above the heading — which is also a <p>. */
+.prose h1 + p::first-letter {
+  float: left;
+  font-family: 'IM Fell English', Georgia, 'Times New Roman', serif;
+  font-size: 3.9rem;
+  line-height: 0.82;
+  padding: 0.1rem 0.6rem 0 0;
+  color: var(--gold);
+  font-weight: 900;
+}
+
+.prose h2 {
+  font-size: 1.35rem;
+  font-style: italic;
+  margin-top: 2.4rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--rule-line);
+}
+
+.auth {
+  max-width: 420px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  margin: 1.8rem 0 1.2rem;
+}
+
+.form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--gold);
+}
+
+.form__pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.1rem;
+}
+
+.error {
+  background: rgba(150, 50, 30, 0.08);
+  border: 1px solid rgba(150, 50, 30, 0.3);
+  border-left: 3px solid #9b3220;
+  color: #8a2c1c;
+  padding: 0.6rem 0.85rem;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+/* ---------- the shop assistant, as a tipped-in note ---------- */
+
+.chat__launcher {
+  position: fixed;
+  right: 1.6rem;
+  bottom: 1.6rem;
+  z-index: 60;
+  width: 3.7rem;
+  height: 3.7rem;
+  border-radius: 50%;
+  border: 1px solid var(--gold);
+  background: var(--navy);
+  color: var(--gold-bright);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(30, 20, 6, 0.45);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.chat__launcher:hover {
+  transform: scale(1.06);
+  background: var(--navy-soft);
+}
+
+.chat {
+  position: fixed;
+  right: 1.6rem;
+  bottom: 5.9rem;
+  z-index: 60;
+  width: min(372px, calc(100vw - 3rem));
+  height: min(540px, calc(100vh - 9.5rem));
+  display: flex;
+  flex-direction: column;
+  background: var(--paper-light);
+  border: 1px solid var(--rule);
+  box-shadow: 0 20px 48px rgba(40, 28, 10, 0.4);
+  overflow: hidden;
+}
+
+.chat__header {
+  background: var(--navy);
+  color: var(--gold-pale);
+  padding: 0.8rem 1rem;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  border-bottom: 2px solid var(--gold);
+}
+
+.chat__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold-bright);
+}
+
+.chat__log {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  /* Faint ruled lines, like a notebook page. */
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 27px,
+    rgba(176, 136, 40, 0.13) 27px,
+    rgba(176, 136, 40, 0.13) 28px
+  );
+}
+
+.bubble {
+  max-width: 87%;
+  padding: 0.6rem 0.85rem;
+  font-size: 0.93rem;
+  line-height: 1.55;
+}
+
+.bubble p {
+  margin: 0;
+}
+
+.bubble--assistant {
+  background: rgba(255, 253, 247, 0.95);
+  border: 1px solid var(--rule-line);
+  border-left: 3px solid var(--gold);
+  align-self: flex-start;
+}
+
+.bubble--user {
+  background: var(--navy);
+  color: var(--paper-light);
+  align-self: flex-end;
+}
+
+.bubble__md > :first-child {
+  margin-top: 0;
+}
+
+.bubble__md > :last-child {
+  margin-bottom: 0;
+}
+
+.bubble__md p {
+  margin: 0 0 0.5rem;
+}
+
+.bubble__md ul,
+.bubble__md ol {
+  margin: 0.4rem 0;
+  padding-left: 1.2rem;
+}
+
+.bubble__md li {
+  margin-bottom: 0.2rem;
+}
+
+.bubble__md strong {
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.chat__results {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-top: 0.7rem;
+}
+
+.chat__form {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.7rem;
+  border-top: 1px solid var(--rule);
+  background: var(--paper-shade);
+}
+
+.chat__form input {
+  flex: 1;
+}
+
+.chat__form button {
+  font-family: inherit;
+  border: 1px solid var(--navy);
+  background: var(--navy);
+  color: var(--paper-light);
+  padding: 0 1rem;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+}
+
+.chat__form button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ---------- colophon ---------- */
+
+.footer {
+  border-top: 3px double var(--gold);
+  margin-top: 2rem;
+  padding: 1.7rem 1.6rem;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--ink-soft);
+  max-width: 1120px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+/* ---------- motion ---------- */
+
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.grid .card {
+  animation: riseIn 0.45s ease both;
+}
+
+/* A short stagger so plates settle onto the page in sequence. */
+.grid .card:nth-child(1) { animation-delay: 0.02s; }
+.grid .card:nth-child(2) { animation-delay: 0.06s; }
+.grid .card:nth-child(3) { animation-delay: 0.1s; }
+.grid .card:nth-child(4) { animation-delay: 0.14s; }
+.grid .card:nth-child(5) { animation-delay: 0.18s; }
+.grid .card:nth-child(6) { animation-delay: 0.22s; }
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+  .card:hover {
+    transform: none;
+  }
+}
+
+@media (max-width: 880px) {
+  :root {
+    font-size: 17px;
+  }
+
+  .detail {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .detail::before {
+    display: none;
+  }
+
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+
+  .nav__inner {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+}

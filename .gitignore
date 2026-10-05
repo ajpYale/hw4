@@ -1,0 +1,24 @@
+# Course data pack — graders drop this in locally, it must never be committed
+data/
+
+# Secrets
+.env
+.env.local
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+
+# Node
+node_modules/
+dist/
+*.local
+
+# Editors / OS
+.DS_Store
+.vscode/
+.idea/
+
+# Claude Code tooling config, not part of the submission
+.claude/
